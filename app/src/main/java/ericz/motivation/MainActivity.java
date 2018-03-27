@@ -2,6 +2,7 @@ package ericz.motivation;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,11 +28,9 @@ public class MainActivity extends AppCompatActivity {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
 
+                Intent intent = new Intent(MainActivity.this, NewGoal.class);
+                startActivity(intent);
 
-                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-                NewGoal newGoal = new NewGoal();
-                newGoal.show(fragmentManager, "string");
-                newGoal.setCancelable(false);
             }
         });
     }
