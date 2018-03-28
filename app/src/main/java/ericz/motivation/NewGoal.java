@@ -1,5 +1,6 @@
 package ericz.motivation;
 
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,10 +22,10 @@ public class NewGoal extends AppCompatActivity {
         setContentView(R.layout.activity_new_goal);
 
         final SeekBar mileBar = findViewById(R.id.mileGoalBar);
-        SeekBar moneyBar = findViewById(R.id.moneyBar);
+        final SeekBar moneyBar = findViewById(R.id.moneyBar);
 
-        final TextView mileText = findViewById(R.id.mileText);
-        final TextView moneyText = findViewById(R.id.moneyText);
+        final TextInputEditText mileText = findViewById(R.id.mileText);
+        final TextInputEditText moneyText = findViewById(R.id.moneyText);
 
         //Getting the data from the bar with a listener
         mileBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -32,7 +33,7 @@ public class NewGoal extends AppCompatActivity {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mileProgress = progress + 1;
+                mileProgress = progress;
             }
 
             @Override
@@ -44,6 +45,7 @@ public class NewGoal extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
 
                 mileText.setText(String.valueOf(mileProgress));
+                mileText.setSelection(mileText.getText().length());
 
             }
         });
@@ -51,11 +53,11 @@ public class NewGoal extends AppCompatActivity {
 
         //Getting the data from the bar with a listener
         moneyBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            String moneyProgress = "";
+            int moneyProgress = 0;
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                moneyProgress = String.valueOf(progress);
+                moneyProgress = progress;
             }
 
             @Override
@@ -65,11 +67,25 @@ public class NewGoal extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                moneyText.setText(moneyProgress);
+
+                if(moneyProgress < 4)
+                {
+                    moneyText.setText(String.valueOf(4));
+                    moneyText.setSelection(moneyText.getText().length());
+
+                }
+                else {
+                    moneyText.setText(String.valueOf(moneyProgress));
+                    moneyText.setSelection(moneyText.getText().length());
+
+                }
             }
         });
 
 
+
+
+        //TEXT LISTENERS
         mileText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -86,6 +102,37 @@ public class NewGoal extends AppCompatActivity {
                 try{
                     //Update Seekbar value after entering a number
                     mileBar.setProgress(Integer.parseInt(editable.toString()));
+
+                } catch(Exception ex) {
+
+                }
+
+            }
+        });
+
+        moneyText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try{
+                    //Update Seekbar value after entering a number
+                    if(Integer.parseInt(editable.toString()) < 4)
+                    {
+                        moneyText.setError("Value is below $4. ");
+                    }
+
+                    moneyBar.setProgress(Integer.parseInt(editable.toString()));
+
+
                 } catch(Exception ex) {
 
                 }
