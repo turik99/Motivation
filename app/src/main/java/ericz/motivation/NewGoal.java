@@ -7,9 +7,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
@@ -26,6 +28,25 @@ public class NewGoal extends AppCompatActivity {
 
         final TextInputEditText mileText = findViewById(R.id.mileText);
         final TextInputEditText moneyText = findViewById(R.id.moneyText);
+
+        final TextView goalText = findViewById(R.id.mileGoalText);
+        TextView periodText = findViewById(R.id.periodText);
+        TextView penaltyText = findViewById(R.id.penaltyText);
+
+
+        Spinner spinner = findViewById(R.id.spinner);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         //Getting the data from the bar with a listener
         mileBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -99,11 +120,15 @@ public class NewGoal extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                try{
+                try
+                {
                     //Update Seekbar value after entering a number
                     mileBar.setProgress(Integer.parseInt(editable.toString()));
+                    goalText.setText(mileText.getText().toString() + " miles over ");
 
-                } catch(Exception ex) {
+                }
+                catch(Exception ex)
+                {
 
                 }
 
@@ -128,6 +153,12 @@ public class NewGoal extends AppCompatActivity {
                     if(Integer.parseInt(editable.toString()) < 4)
                     {
                         moneyText.setError("Value is below $4. ");
+                    }
+
+                    if (Integer.parseInt(editable.toString() ) > 40)
+                    {
+                        moneyText.setText("40");
+                        moneyText.setSelection(2);
                     }
 
                     moneyBar.setProgress(Integer.parseInt(editable.toString()));
