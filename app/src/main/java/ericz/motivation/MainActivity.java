@@ -1,18 +1,21 @@
 package ericz.motivation;
 
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NewGoalFragment.OnFragmentInteractionListener{
+
+
+    private FloatingActionButton button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,16 +24,22 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setActionBar(toolbar);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        this.button = findViewById(R.id.floatingActionButton);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-                fragmentTransaction.add(R.id.content, NewGoalFragment.newInstance("meme 1", "meme 2"));
+                fragmentTransaction.add(R.id.content, NewGoalFragment.newInstance());
 
                 fragmentTransaction.commit();
+
+                button.setVisibility(View.GONE);
+
             }
         });
+        toolbar.setTitle("Motivation.");
+        toolbar.setTitleTextColor(Color.WHITE);
     }
 
     @Override
@@ -53,5 +62,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

@@ -6,40 +6,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="ericz.motivation.NewGoal">
 
     <Button
-        android:id="@+id/button"
-        style="@style/Widget.AppCompat.Button.Borderless"
+        android:id="@+id/okButton"
+        style="@android:style/Widget.Material.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         android:text="OK!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/cancelButton"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button" />
+        app:layout_constraintEnd_toStartOf="@+id/okButton"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="0dp"
         android:layout_height="28dp"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="Failure penalty"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="223dp" />
+        app:layout_constraintTop_toBottomOf="@+id/discreteSeekBar" />
 
     <TextView
         android:id="@+id/textView5"
@@ -100,18 +103,67 @@
         app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
     <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
-        app:dsb_progressColor="@color/colorAccent"
-        app:dsb_trackColor="@color/colorAccent"
-        app:dsb_indicatorColor="@color/colorAccent"
-        android:layout_width="200dp"
+        android:id="@+id/discreteSeekBar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:dsb_min="2"
+        app:dsb_indicatorColor="@color/colorAccent"
         app:dsb_max="15"
-        />
+        app:dsb_min="2"
+        app:dsb_progressColor="@color/colorAccent"
+        app:dsb_trackColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toStartOf="@+id/mileText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/mileText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="2 miles"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="@+id/discreteSeekBar"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6">
+
+        <RadioButton
+            android:id="@+id/radioButton4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="$10" />
+
+        <RadioButton
+            android:id="@+id/radioButton5"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="$20" />
+
+        <RadioButton
+            android:id="@+id/radioButton6"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="$30" />
+    </RadioGroup>
 
 
 </android.support.constraint.ConstraintLayout>
