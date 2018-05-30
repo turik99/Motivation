@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ public class NewGoalFragment extends Fragment{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private String mParam1;
     private String mParam2;
-
+    private FloatingActionButton button;
     private OnFragmentInteractionListener mListener;
 
     public NewGoalFragment() {
@@ -49,16 +50,19 @@ public class NewGoalFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_new_goal, container, false);
+        final View view = inflater.inflate(R.layout.fragment_new_goal, container, false);
 
         Button okButton = view.findViewById(R.id.okButton);
         Button cancelButton = view.findViewById(R.id.cancelButton);
+
+
 
 
         okButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().getFragmentManager().beginTransaction().remove(NewGoalFragment.this).commit();
+                NewGoalFragment.this.button = view.findViewById(R.id.floatingActionButton);
 
             }
         });
