@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "1049077143469",
+    "firebase_url": "https://motivation-eric.firebaseio.com",
+    "project_id": "motivation-eric",
+    "storage_bucket": "motivation-eric.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049077143469:android:028fe18cdce0ba25",
+        "android_client_info": {
+          "package_name": "ericz.motivation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049077143469-r33e4da45eulbfoi3p8563839cov2sk2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ericz.motivation",
+            "certificate_hash": "2967c0f84dd3d65978fdcfabe5cf77b3612f26d0"
+          }
+        },
+        {
+          "client_id": "1049077143469-q3337d539g2u4mc7hsd0eb03mrjtbkab.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1049077143469-q3337d539g2u4mc7hsd0eb03mrjtbkab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC235kymtdebFyfyW_tVv1JI5s6yHcG46E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049077143469-q3337d539g2u4mc7hsd0eb03mrjtbkab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
