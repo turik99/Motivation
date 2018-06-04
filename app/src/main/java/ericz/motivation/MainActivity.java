@@ -31,9 +31,7 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
                 final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
                 fragmentTransaction.add(R.id.content, NewGoalFragment.newInstance());
-
                 fragmentTransaction.commit();
-
                 button.setVisibility(View.GONE);
 
             }
