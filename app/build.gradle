@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -14,6 +14,20 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    signingConfigs{
+        key{
+            keyAlias 'eric'
+            keyPassword 'ericiscool1'
+            storeFile file('release/keystore.jks')
+            storePassword 'ericiscool1'
+        }
+    }
+    buildTypes {
+        debug{
+            signingConfig signingConfigs.key
         }
     }
 }
@@ -33,8 +47,7 @@ dependencies {
     implementation 'com.truizlop.fabreveallayout:library:1.0.0'
     implementation 'com.allattentionhere:fabulousfilter:0.0.5'
     implementation 'com.firebaseui:firebase-ui-auth:4.0.0'
-    classpath 'com.google.gms:google-services:3.1.0'
-
-
-
+    implementation 'com.google.gms:google-services:4.0.1'
 }
+
+

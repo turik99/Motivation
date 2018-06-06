@@ -24,13 +24,14 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements NewGoalFragment.OnFragmentInteractionListener{
 
     private static final int RC_SIGN_IN = 123;
+    private String name;
 
 // ...
 
     // Choose authentication providers
+
     List<AuthUI.IdpConfig> providers = Arrays.asList(
             new AuthUI.IdpConfig.GoogleBuilder().build());
-
 
 
     private FloatingActionButton button;
@@ -68,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
                         .setAvailableProviders(providers)
                         .build(),
                 RC_SIGN_IN);
-
-
 
     }
 
@@ -110,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                
                 // ...
             } else {
                 // Sign in failed. If response is null the user canceled the
