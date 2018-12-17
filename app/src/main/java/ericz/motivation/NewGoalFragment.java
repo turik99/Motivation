@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.allattentionhere.fabulousfilter.AAH_FabulousFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 /**
@@ -26,8 +28,6 @@ import com.allattentionhere.fabulousfilter.AAH_FabulousFragment;
 public class NewGoalFragment extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private String mParam1;
-    private String mParam2;
     private FloatingActionButton button;
     private OnFragmentInteractionListener mListener;
 
@@ -59,6 +59,8 @@ public class NewGoalFragment extends Fragment{
         final TextView introText = getActivity().findViewById(R.id.introText);
         introText.setVisibility(View.GONE);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String google_user_id = user.getUid();
 
         okButton.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -67,6 +69,10 @@ public class NewGoalFragment extends Fragment{
                 NewGoalFragment.this.button = getActivity().findViewById(R.id.floatingActionButton);
                 introText.setVisibility(View.VISIBLE);
                 NewGoalFragment.this.button.setVisibility(View.VISIBLE);
+
+
+
+
             }
         });
 

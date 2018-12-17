@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                Log.v("Successfull sign in", "user id is " + user.getUid());
                 
                 // ...
             } else {
@@ -118,6 +120,10 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
                 // ...
             }
         }
+    }
+    public void getDatabase()
+    {
+
     }
 
 }
