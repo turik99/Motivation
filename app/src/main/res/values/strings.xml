@@ -5,6 +5,23 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="credit_card_headline">To move forward with the commitment, we need to charge your credit or debit card.</string>
+    <array name="startDate">
+        <item>Today</item>
+        <item>Tomorrow</item>
+        <item>The day after tomorrow</item>
+        <item>Custom</item>
+    </array>
+
+    <string name="wtfCancel">asefwaefsdce</string>
+    <string name="wtfMileGoal">asdfaewfa</string>
+    <string name="wtfMonetaryCommitment">awdfasef</string>
+    <array name="endDate">
+        <item>next week</item>
+        <item>next month</item>
+        <item>Custom</item>
+    </array>
+
     <array name="calendar">
         <item>1 week</item>
         <item>2 weeks</item>

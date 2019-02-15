@@ -7,30 +7,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="ericz.motivation.NewGoal">
+    tools:context="ericz.motivation.NewGoalFragment">
 
     <Button
         android:id="@+id/okButton"
-        style="@android:style/Widget.Material.Button.Colored"
+        style="@android:style/Widget.Material.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:text="OK!"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
-
-    <Button
-        android:id="@+id/cancelButton"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Cancel"
+        android:text="OK!"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/okButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
 
     <TextView
@@ -39,57 +28,10 @@
         android:layout_height="28dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Failure penalty"
+        android:text="Commitment"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/discreteSeekBar" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Goal Period"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5">
-
-        <RadioButton
-            android:padding="5dp"
-            android:id="@+id/radioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="1 week" />
-
-        <RadioButton
-            android:padding="5dp"
-            android:id="@+id/radioButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="2 weeks" />
-
-        <RadioButton
-            android:padding="5dp"
-
-            android:id="@+id/radioButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="1 month" />
-    </RadioGroup>
+        app:layout_constraintTop_toBottomOf="@+id/distanceSeekBar" />
 
     <TextView
         android:id="@+id/textView"
@@ -100,33 +42,34 @@
         android:text="Distance Goal"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/startDateText" />
 
     <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
-        android:id="@+id/discreteSeekBar"
-        android:layout_width="0dp"
+        android:id="@+id/distanceSeekBar"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:dsb_indicatorColor="@color/colorAccent"
-        app:dsb_max="15"
+        app:dsb_max="100"
         app:dsb_min="2"
         app:dsb_progressColor="@color/colorAccent"
         app:dsb_trackColor="@color/colorPrimaryDark"
-        app:layout_constraintEnd_toStartOf="@+id/mileText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <TextView
-        android:id="@+id/mileText"
+    <EditText
+        android:gravity="right"
+        android:ellipsize="end"
+        android:id="@+id/mileEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="2 miles"
+        android:inputType="number"
+        android:text="2"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@+id/discreteSeekBar"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/textView6"
+        app:layout_constraintEnd_toStartOf="@+id/textView2" />
 
     <RadioGroup
         android:id="@+id/radioGroup2"
@@ -139,29 +82,145 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6">
 
         <RadioButton
-            android:id="@+id/tenDollarPen"
+            android:id="@+id/eightDollarPen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingRight="5dp"
-            android:text="$10" />
+            android:paddingRight="2dp"
+            android:text="$8"/>
 
         <RadioButton
-            android:id="@+id/twentyDollarPen"
+            android:id="@+id/fifteenDollarPen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingRight="5dp"
-            android:text="$20" />
+            android:checked="true"
+            android:paddingRight="2dp"
+            android:text="$15" />
 
         <RadioButton
-            android:id="@+id/thirtyDollarPen"
+            android:id="@+id/fourtyDollarPen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingRight="5dp"
-            android:text="$30" />
+            android:paddingRight="2dp"
+            android:text="$40" />
+
+        <RadioButton
+            android:id="@+id/oneHundredDollarPen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingRight="2dp"
+            android:text="$100" />
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="12dp"
+        android:text="miles"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toBottomOf="@+id/mileEdit"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/penaltyEdit"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/radioGroup2"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Goal Time Frame"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/startDateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="9/8/1999"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startDateSpinner" />
+
+    <TextView
+        android:id="@+id/endDateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="9/8/1999"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="@+id/endDateSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/endDateSpinner" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="or"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toBottomOf="@+id/radioGroup2"
+        app:layout_constraintEnd_toStartOf="@+id/textView7"
+        app:layout_constraintStart_toEndOf="@+id/radioGroup2" />
+
+    <Spinner
+        android:id="@+id/startDateSpinner"
+        android:layout_width="148dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:entries="@array/startDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <Spinner
+        android:id="@+id/endDateSpinner"
+        android:layout_width="162dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:entries="@array/endDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="$"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toBottomOf="@+id/penaltyEdit"
+        app:layout_constraintEnd_toStartOf="@+id/penaltyEdit" />
+
+    <Button
+        android:id="@+id/wtfButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Wait! How does this work?"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

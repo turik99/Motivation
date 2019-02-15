@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "ericz.motivation"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -17,8 +17,8 @@ android {
         }
     }
 
-    signingConfigs{
-        key{
+    signingConfigs {
+        key {
             keyAlias 'eric'
             keyPassword 'ericiscool1'
             storeFile file('release/keystore.jks')
@@ -26,13 +26,27 @@ android {
         }
     }
     buildTypes {
-        debug{
+        debug {
             signingConfig signingConfigs.key
         }
     }
 
 }
 
+android {
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
+
+}
 
 
 
@@ -50,9 +64,18 @@ dependencies {
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.truizlop.fabreveallayout:library:1.0.0'
     implementation 'com.allattentionhere:fabulousfilter:0.0.5'
-    implementation 'com.firebaseui:firebase-ui-auth:4.0.0'
     implementation 'com.google.gms:google-services:4.2.0'
-    implementation 'com.google.firebase:firebase-admin:6.6.0'
+    implementation 'com.google.firebase:firebase-firestore:18.0.1'
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.firebase:firebase-database:16.0.6'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+    implementation 'com.firebaseui:firebase-ui-database:0.4.0'
+    implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
+    implementation 'com.google.apis:google-api-services-fitness:v1-rev20181112-1.27.0'
+    implementation 'com.google.android.gms:play-services-fitness:16.0.1'
+    implementation 'com.android.billingclient:billing:1.2'
+    implementation 'com.stripe:stripe-android:6.1.2'
+    implementation 'com.google.android.gms:play-services-wallet:16.0.1'
 }
 
-
+apply plugin: 'com.google.gms.google-services'
