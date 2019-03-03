@@ -252,7 +252,8 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
         CollectionReference collectionReference = firestore.collection("users");
         Log.v("getting database", "db and ref gotten");
 
-        Query query = collectionReference.whereArrayContains("goal", "BqpoiTuEeLVj1IZpUSHy5o3RfL73");
+
+        Query query = collectionReference.whereArrayContains("goal", user.getUid());
         Log.v("getting database", "sorting started");
 
 

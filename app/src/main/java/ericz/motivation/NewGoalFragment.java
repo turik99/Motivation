@@ -416,7 +416,7 @@ public class NewGoalFragment extends Fragment{
     //Payment Related code in this method.
     public void updateGoal()
     {
-        DocumentReference reference = firestore.collection("users").document("eric");
+        DocumentReference reference = firestore.collection("users").document(userId);
 
         //die Zeit is German for 'the time' Sorry for writing in german so much. When you have two similar variables,
         //and don't want to name them the same thing, just defaulting to a different language can help save some confu

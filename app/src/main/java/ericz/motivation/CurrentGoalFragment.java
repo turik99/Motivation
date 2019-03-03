@@ -240,8 +240,8 @@ public class CurrentGoalFragment extends Fragment implements GoogleApiClient.OnC
             public boolean onMenuItemClick(MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.delete)
                 {
-                    Intent intent = new Intent(getActivity(), Paydenbts.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(getActivity(), Paydenbts.class);
+//                    startActivity(intent);
                 }
                 return false;
             }
