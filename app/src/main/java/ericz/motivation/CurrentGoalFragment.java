@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
@@ -19,14 +20,31 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.data.Bucket;
+import com.google.android.gms.fitness.data.DataPoint;
+import com.google.android.gms.fitness.data.DataSet;
+import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Field;
+import com.google.android.gms.fitness.request.DataReadRequest;
+import com.google.android.gms.fitness.result.DataReadResult;
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -37,7 +55,7 @@ import java.util.Map;
  * Use the {@link CurrentGoalFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CurrentGoalFragment extends Fragment {
+public class CurrentGoalFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener{
     // TODO: Rename parameter arguments, choose names that match
 
 
@@ -52,7 +70,8 @@ public class CurrentGoalFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     Map<String, Integer> myMap = new HashMap<String, Integer>();
     private String goalStatus;
-
+    private DataSet fitData;
+    private GoogleApiClient mClient;
 
     //German for "the finished list" - this variable is the final form so to speak of the data we gather
     //from the FireBase database, which is like the number of miles ran and all that.
@@ -68,11 +87,7 @@ public class CurrentGoalFragment extends Fragment {
     //Think of this as a constructor. Not sure why Android likes to do NewInstance but it be like that.
     public static CurrentGoalFragment newInstance(Bundle bundle) {
         CurrentGoalFragment fragment = new CurrentGoalFragment();
-        Bundle args = bundle;
-        fragment.setArguments(args);
-
-
-
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -307,12 +322,96 @@ public class CurrentGoalFragment extends Fragment {
         earnedBack.setText("$" + df.format(Float.valueOf(dieFertigeListe[7])));
 
 
+
+        //Accessing Google Fit which should update some UI Elements now or in the future.
+        accessGoogleFit();
         //And we're done here.
         return view;
 
 
     }
 
+
+    //This method accesses the GoogleFit History API, by creating and fulfilling a data read request
+    //with the data we want. if the data is gathered successfully, it calls the OnResult function
+    //under the PendingResult<DataReadResult> code, which then dumps the 'buckets' of data to the log
+    //by sending it to the Process Data function.
+    private void accessGoogleFit() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        long endTime = cal.getTimeInMillis();
+        cal.add(Calendar.WEEK_OF_YEAR, -1);
+        long startTime = cal.getTimeInMillis();
+
+
+
+        Log.v("accessGoogle Fit", "Accessing google Fit");
+        DataReadRequest readRequest = new DataReadRequest.Builder()
+                .aggregate(DataType.TYPE_ACTIVITY_SEGMENT, DataType.AGGREGATE_ACTIVITY_SUMMARY)
+                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                .bucketByTime(1, TimeUnit.DAYS)
+                .build();
+
+        Log.v("access google fit", "Google Client Set");
+
+        PendingResult<DataReadResult> pendingresult =
+                Fitness.HistoryApi.readData(mClient, readRequest);
+
+
+        pendingresult.setResultCallback(new ResultCallback<DataReadResult>() {
+            @Override
+            public void onResult(@NonNull DataReadResult dataReadResult) {
+                if (dataReadResult.getBuckets().size()>0)
+                {
+                    for (Bucket bucket : dataReadResult.getBuckets())
+                    {
+                        List<DataSet> dataSets = bucket.getDataSets();
+                        for (DataSet dataSet : dataSets)
+                        {
+                            processDataSet(dataSet);
+                        }
+                    }
+                }
+            }
+        });
+
+
+    }
+
+    //THis is a very complicated way to simply LOG a data point.
+    public void processDataSet (DataSet dataSet)
+    {
+        String TAG = "fitness history";
+
+        for (DataPoint dataPoint : dataSet.getDataPoints())
+        {
+            long start = dataPoint.getStartTime(TimeUnit.MILLISECONDS);
+            long end = dataPoint.getEndTime(TimeUnit.MILLISECONDS);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS", Locale.US);
+            long time = System.currentTimeMillis();
+
+            Date date = new Date(time);
+
+            Calendar clendar = Calendar.getInstance();
+            clendar.setTimeInMillis(time);
+
+            Date startDate = new Date(start);
+            Date endDate = new Date(end);
+
+            Log.v(TAG, "Data Point:");
+            Log.v(TAG, "\tType " + dataPoint.getDataType().getName());
+            Log.v(TAG, "\tStart " + sdf.format(startDate));
+            Log.v(TAG, "\tEnd " + sdf.format(endDate));
+            for (Field field : dataPoint.getDataType().getFields())
+            {
+                String fieldName = field.getName();
+                Log.v(TAG, "\tField " + fieldName +
+                        " Value: " +dataPoint.getValue(field));
+            }
+
+
+        }
+    }
 
     //Magic. Not sure what this is for. Boiler plate code from Google/Android.
     @Override
@@ -330,6 +429,11 @@ public class CurrentGoalFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
     /**

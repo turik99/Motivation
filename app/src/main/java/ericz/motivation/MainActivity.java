@@ -1,26 +1,24 @@
 package ericz.motivation;
 
 import android.app.ProgressDialog;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.android.billingclient.api.BillingClient;
-import com.android.vending.billing.IInAppBillingService;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -60,15 +58,11 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import ericz.motivation.util.IabHelper;
-import ericz.motivation.util.IabResult;
-
-import static java.text.DateFormat.getTimeInstance;
 
 public class MainActivity extends AppCompatActivity implements NewGoalFragment.OnFragmentInteractionListener,
         CurrentGoalFragment.OnFragmentInteractionListener, GoogleApiClient.OnConnectionFailedListener{
 
     private static final int RC_SIGN_IN = 123;
-    private String name;
     private GoogleApiClient mClient;
     int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 112;
     private FirebaseUser user;
@@ -79,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
     private PaymentsClient paymentsClient;
     private BillingClient mBillingClient;
     IabHelper mHelper;
+    private SignInButton signInButton;
+    private TextView signInText;
+    private Bundle currentRunningData;
 // ...
 
     // Choose authentication providers
@@ -125,6 +122,9 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
         } else {
 
         }
+
+        signInButton = findViewById(R.id.googleSignInButton);
+        signInText = findViewById(R.id.googleSignInText);
 
 
         // Create and launch sign-in intent
@@ -185,6 +185,14 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
                 Log.v("Successfull sign in", "user id is " + user.getUid());
                 // ...
 
+                mClient = new GoogleApiClient.Builder(MainActivity.this)
+                        .enableAutoManage(MainActivity.this, this)
+                        .addApi(Fitness.HISTORY_API)
+                        .addScope(Fitness.SCOPE_ACTIVITY_READ)
+                        .build();
+
+                this.signInText.setText("");
+                this.signInButton.setVisibility(Button.INVISIBLE);
                 FitnessOptions fitnessOptions = FitnessOptions.builder()
                         .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
                         .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
@@ -198,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
                             GoogleSignIn.getLastSignedInAccount(this),
                             fitnessOptions);
                 } else {
-                    accessGoogleFit();
                 }
 
 
@@ -269,10 +276,11 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
                     dasArray = data.values().toArray();
                     Log.v("data snap array test", dasArray[0].toString());
 
-                    Bundle currentRunningData = new Bundle();
+                    currentRunningData = new Bundle();
 
                     currentRunningData.putString("theDataYouNeed", runningDataBundleArg);
                     currentRunningData.putString("key", dasArray[0].toString());
+
 
                     fragClass
                             = (android.support.v4.app.Fragment)
@@ -282,7 +290,6 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
 //                    fragClass.setArguments(currentRunningData);
                     fragmentTransaction.add(R.id.content, fragClass);
                     fragmentTransaction.commit();
-
                     progressDialog.dismiss();
                 }
                 else
@@ -306,93 +313,10 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
     }
 
 
-    //This method accesses the GoogleFit History API, by creating and fulfilling a data read request
-    //with the data we want. if the data is gathered successfully, it calls the OnResult function
-    //under the PendingResult<DataReadResult> code, which then dumps the 'buckets' of data to the log
-    //by sending it to the Process Data function.
-    private void accessGoogleFit() {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        long endTime = cal.getTimeInMillis();
-        cal.add(Calendar.WEEK_OF_YEAR, -1);
-        long startTime = cal.getTimeInMillis();
-
-
-        Log.v("accessGoogle Fit", "Accessing google Fit");
-        DataReadRequest readRequest = new DataReadRequest.Builder()
-                .aggregate(DataType.TYPE_ACTIVITY_SEGMENT, DataType.AGGREGATE_ACTIVITY_SUMMARY)
-                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-                .bucketByTime(1, TimeUnit.DAYS)
-                .build();
 
 
 
-        mClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Fitness.HISTORY_API)
-                .addScope(Fitness.SCOPE_ACTIVITY_READ)
-                .build();
 
-
-        PendingResult<DataReadResult> pendingresult =
-                Fitness.HistoryApi.readData(mClient, readRequest);
-
-
-        pendingresult.setResultCallback(new ResultCallback<DataReadResult>() {
-            @Override
-            public void onResult(@NonNull DataReadResult dataReadResult) {
-                if (dataReadResult.getBuckets().size()>0)
-                {
-                    for (Bucket bucket : dataReadResult.getBuckets())
-                    {
-                        List<DataSet> dataSets = bucket.getDataSets();
-                        for (DataSet dataSet : dataSets)
-                        {
-                            processDataSet(dataSet);
-                        }
-                    }
-                }
-            }
-        });
-
-
-    }
-
-
-    //THis is a very complicated way to simply LOG a data point.
-    public void processDataSet (DataSet dataSet)
-    {
-        String TAG = "fitness history";
-
-        for (DataPoint dataPoint : dataSet.getDataPoints())
-        {
-            long start = dataPoint.getStartTime(TimeUnit.MILLISECONDS);
-            long end = dataPoint.getEndTime(TimeUnit.MILLISECONDS);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS", Locale.US);
-            long time = System.currentTimeMillis();
-
-            Date date = new Date(time);
-
-            Calendar clendar = Calendar.getInstance();
-            clendar.setTimeInMillis(time);
-
-            Date startDate = new Date(start);
-            Date endDate = new Date(end);
-
-            Log.v(TAG, "Data Point:");
-            Log.v(TAG, "\tType " + dataPoint.getDataType().getName());
-            Log.v(TAG, "\tStart " + sdf.format(startDate));
-            Log.v(TAG, "\tEnd " + sdf.format(endDate));
-            for (Field field : dataPoint.getDataType().getFields())
-            {
-                String fieldName = field.getName();
-                Log.v(TAG, "\tField " + fieldName +
-                        " Value: " +dataPoint.getValue(field));
-            }
-
-
-        }
-    }
 
 
     private void isReadyToPay() {
@@ -427,6 +351,10 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
             fragmentTransaction.remove(fragClass);
             fragmentTransaction.commit();
             getDatabase();
+        }
+        if (signal.equals("currentGoalFragment"))
+        {
+
         }
     }
 

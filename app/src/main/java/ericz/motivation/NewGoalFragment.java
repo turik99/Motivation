@@ -421,7 +421,7 @@ public class NewGoalFragment extends Fragment{
         //die Zeit is German for 'the time' Sorry for writing in german so much. When you have two similar variables,
         //and don't want to name them the same thing, just defaulting to a different language can help save some confu
         //sion if you know that language. Ja Wohl!!! und viel danke für deiner Hilfen!
-        
+
         double dieZeit = System.currentTimeMillis();
         reference.update("goal", FieldValue.arrayUnion(userId, dieZeit,
                 startDateText.getText().toString(), endDateText.getText().toString(), penalty, Integer.valueOf(mileEdit.getText().toString()), 0, 0.00)).addOnSuccessListener(new OnSuccessListener<Void>() {
