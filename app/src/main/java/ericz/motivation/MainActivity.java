@@ -318,34 +318,95 @@ public class MainActivity extends AppCompatActivity implements NewGoalFragment.O
 
 
 
+    //This method accesses the GoogleFit History API, by creating and fulfilling a data read request
+    //with the data we want. if the data is gathered successfully, it calls the OnResult function
+    //under the PendingResult<DataReadResult> code, which then dumps the 'buckets' of data to the log
+    //by sending it to the Process Data function.
+    private void accessGoogleFit() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        long endTime = cal.getTimeInMillis();
+        cal.add(Calendar.WEEK_OF_YEAR, -1);
+        long startTime = cal.getTimeInMillis();
 
 
-    private void isReadyToPay() {
-        IsReadyToPayRequest request = IsReadyToPayRequest.newBuilder()
-                .addAllowedPaymentMethod(WalletConstants.PAYMENT_METHOD_CARD)
-                .addAllowedPaymentMethod(WalletConstants.PAYMENT_METHOD_TOKENIZED_CARD)
+
+        Log.v("accessGoogle Fit", "Accessing google Fit");
+        DataReadRequest readRequest = new DataReadRequest.Builder()
+                .aggregate(DataType.TYPE_ACTIVITY_SEGMENT, DataType.AGGREGATE_ACTIVITY_SUMMARY)
+                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                .bucketByTime(1, TimeUnit.DAYS)
                 .build();
-        Task<Boolean> task = paymentsClient.isReadyToPay(request);
-        task.addOnCompleteListener(
-                new OnCompleteListener<Boolean>() {
-                    public void onComplete(Task<Boolean> task) {
-                        try {
-                            boolean result =
-                                    task.getResult(ApiException.class);
-                            if(result == true) {
-                                //show Google as payment option
-                            } else {
-                                //hide Google as payment option
-                            }
-                        } catch (ApiException exception) { }
+
+        Log.v("access google fit", "Google Client Set");
+
+        PendingResult<DataReadResult> pendingresult =
+                Fitness.HistoryApi.readData(mClient, readRequest);
+
+
+        pendingresult.setResultCallback(new ResultCallback<DataReadResult>() {
+            @Override
+            public void onResult(@NonNull DataReadResult dataReadResult) {
+                if (dataReadResult.getBuckets().size()>0)
+                {
+                    for (Bucket bucket : dataReadResult.getBuckets())
+                    {
+                        List<DataSet> dataSets = bucket.getDataSets();
+                        for (DataSet dataSet : dataSets)
+                        {
+                            processDataSet(dataSet);
+                        }
                     }
-                });
+                }
+            }
+        });
+
+
+    }
+
+    //THis is a very complicated way to simply LOG a data point.
+    public void processDataSet (DataSet dataSet)
+    {
+        String TAG = "fitness history";
+
+        for (DataPoint dataPoint : dataSet.getDataPoints())
+        {
+            long start = dataPoint.getStartTime(TimeUnit.MILLISECONDS);
+            long end = dataPoint.getEndTime(TimeUnit.MILLISECONDS);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS", Locale.US);
+            long time = System.currentTimeMillis();
+
+            Date date = new Date(time);
+
+            Calendar clendar = Calendar.getInstance();
+            clendar.setTimeInMillis(time);
+
+            Date startDate = new Date(start);
+            Date endDate = new Date(end);
+
+            Log.v(TAG, "Data Point:");
+            Log.v(TAG, "\tType " + dataPoint.getDataType().getName());
+            Log.v(TAG, "\tStart " + sdf.format(startDate));
+            Log.v(TAG, "\tEnd " + sdf.format(endDate));
+            for (Field field : dataPoint.getDataType().getFields())
+            {
+                String fieldName = field.getName();
+                Log.v(TAG, "\tField " + fieldName +
+                        " Value: " +dataPoint.getValue(field));
+            }
+
+
+        }
     }
 
     @Override
     public void onFragmentInteraction(String signal) {
         Log.v("frgment intera. test", signal);
 
+        if (signal.equals("accessGoogleFitFragment"))
+        {
+            accessGoogleFit();
+        }
         if (signal.equals("newGoalMade"))
         {
             fragmentTransaction  = getSupportFragmentManager().beginTransaction();
